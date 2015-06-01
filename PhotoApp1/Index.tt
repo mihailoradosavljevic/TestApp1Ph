@@ -1,0 +1,30 @@
+﻿<#@ template hostspecific="true" #>
+<#@ assembly name="System.Xml" #>
+<#@ import namespace="System.Xml" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.IO" #>
+<#@ output extension=".html" #>
+<#
+string manifest = Host.ResolvePath("assetManifest.xml");
+XmlDocument document = new XmlDocument();
+document.Load(manifest);
+
+string layoutFile =  document.SelectSingleNode("/assets").Attributes["layout"].Value;
+string layout = File.ReadAllText(Host.ResolvePath(layoutFile));
+
+StringBuilder html = new StringBuilder();
+StringBuilder js = new StringBuilder();
+
+foreach (XmlNode item in document.SelectNodes("/assets/asset"))
+{
+	html.AppendLine(String.Format("\t<!--{0}-->",item.Attributes["html"].Value));
+    html.AppendLine("\t" + File.ReadAllText(Host.ResolvePath(item.Attributes["html"].Value)));
+	html.AppendLine();
+    js.AppendLine("\t" + String.Format(@"<script type=""text/javascript"" src=""{0}""></script>",item.Attributes["js"].Value));
+
+}
+
+layout = layout.Replace("<!--Html-->",html.ToString()).Replace("<!--Js-->",js.ToString());
+ 
+#>
+<#= layout #>

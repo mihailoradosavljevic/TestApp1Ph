@@ -1,0 +1,10 @@
+﻿<!-- Usage of config file:
+<assets layout="Layout.html">
+  <asset html="Page1.html" js="Page1.js"/>
+  <asset html="Page2.html" js="Page2.js"/>
+</assets>
+-->
+
+<assets layout="SampleLayout.html">
+
+</assets>
